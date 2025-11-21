@@ -1,0 +1,5 @@
+{
+  "name": "MemoArk",
+  "description": "A serverless, offline-first vocabulary learning application designed to help users master English words through spaced repetition concepts and flashcards.",
+  "requestFramePermissions": []
+}
