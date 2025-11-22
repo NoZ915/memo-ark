@@ -10,7 +10,7 @@ export default function App() {
   const [vocabList, setVocabList] = useState<VocabItem[]>([]);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [activeView, setActiveView] = useState<'dashboard' | 'study' | 'dictionary'>('dashboard');
-  
+
   // Dictionary Filters State lifting
   const [dictOpts, setDictOpts] = useState<{
     statusFilter?: 'all' | 'learning' | 'mastered';
@@ -27,8 +27,10 @@ export default function App() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const url = `${import.meta.env.BASE_URL}data/full_vocab_content.json`
+
   useEffect(() => {
-    fetch('data/full_vocab_content.json')
+    fetch(url)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch');
         return res.json();
@@ -80,7 +82,7 @@ export default function App() {
       try {
         const text = event.target?.result as string;
         const payload = JSON.parse(text);
-        
+
         if (payload.version === 'memoark-progress-v1' && typeof payload.progress === 'object') {
           if (confirm('This will overwrite your current progress. Are you sure?')) {
             importBackup(payload.progress as ProgressMap);
@@ -143,21 +145,21 @@ export default function App() {
 
         {activeView === 'dictionary' && (
           <div className="p-4">
-             <div className="mb-4 flex items-center">
-                <button 
-                  onClick={() => setActiveView('dashboard')}
-                  className="text-sm font-medium text-[#6B7280] hover:text-[#1F3A5F]"
-                >
-                  &larr; Back to Dashboard
-                </button>
-             </div>
-             <Dictionary
-                vocabList={vocabList}
-                progress={progress}
-                defaultStatusFilter={dictOpts.statusFilter}
-                defaultLevelFilter={dictOpts.levelFilter}
-                onUpdateStatus={setStatus}
-             />
+            <div className="mb-4 flex items-center">
+              <button
+                onClick={() => setActiveView('dashboard')}
+                className="text-sm font-medium text-[#6B7280] hover:text-[#1F3A5F]"
+              >
+                &larr; Back to Dashboard
+              </button>
+            </div>
+            <Dictionary
+              vocabList={vocabList}
+              progress={progress}
+              defaultStatusFilter={dictOpts.statusFilter}
+              defaultLevelFilter={dictOpts.levelFilter}
+              onUpdateStatus={setStatus}
+            />
           </div>
         )}
       </main>
